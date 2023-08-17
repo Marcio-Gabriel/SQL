@@ -161,4 +161,6 @@ INSERT INTO tb_item(id_item, ds_item, preco_custo, preco_venda, fg_ativo)
  (7, 'Ventilador Grande', 13.36, 19.95, 1),
  (8, 'Escova de Dentes', 0.75, 1.45, 1),
  (9, 'Papel A4', 2.34, 2.45, 1),
+ (10, 'Saco de Transporte', 0.01, 0.0, 1),
+ (11, 'Alto-Falantes', 19.73, 25.32, 1);
  
