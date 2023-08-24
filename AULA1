@@ -1,10 +1,14 @@
------Criar um database-----
+-----Criar um database----------------------------------------
 CREATE DATABASE "LBD"
 TEMPLATE = TEMPLATE0
 ENCODING 'WIN1252'
 CONNECTION LIMIT -1;
----------------------------
+-----------------------------------------------------------
+-----------------------------------------------------------
+ psql -h localhost -p 5432 -d LBD -U postgres -W
 
+
+-----------------------------------------------------------------------
 SELECT *  //mostrar tabela
  FROM tb_cliente;
 
