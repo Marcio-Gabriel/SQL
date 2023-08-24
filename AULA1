@@ -237,3 +237,66 @@ VALUES
 (7, 8),
 (8, 18),
 (10, 1);
+
+
+
+
+SELECT inet_server_port();
+
+SELECT current_database();
+
+SELECT current_user;
+
+SELECT inet_client_addr(); 
+
+
+ SELECT cidade AS "Cidade do Cliente",
+ 	sobrenome AS "Sobrenome do Cliente"
+ FROM tb_cliente tc;
+
+
+SELECT cidade "Cidade do Cliente",
+	sobrenome "Sobrenome do Cliente"
+FROM tb_cliente tc 
+ORDER BY cidade DESC, sobrenome ASC;
+
+
+SELECT sobrenome
+FROM tb_cliente 
+ORDER BY 1;
+
+SELECT ds_item, preco_custo
+FROM tb_item
+ORDER BY 1;
+
+SELECT ds_item, preco_custo,
+	preco_custo * 100 AS RESULTADO
+FROM tb_item
+ORDER BY 1;
+
+SELECT ds_item, preco_custo,
+	CAST((preco_custo * 100)AS INT)AS"Preço de Custo"
+FROM tb_item
+ORDER BY 1;
+
+
+
+
+SELECT sobrenome AS "Sobrenome do Cliente",
+	Cidade AS "Cidade do Cliente"
+FROM tb_cliente
+WHERE cidade = 'São Paulo';
+
+
+SELECT sobrenome AS "Sobrenome do Cliente",
+	cidade AS "Cidade do Cliente"
+FROM tb_cliente
+WHERE titulo <> 'Sra'
+AND(cidade = 'Sertãozinho' OR cidade = 'São Paulo');
+
+
+SELECT sobrenome AS "Sobrenome do Cliente",
+	cidade AS "Cidade do Cliente"
+FROM tb_cliente
+WHERE cidade = 'São Paulo'
+OR cidade = 'Sorocaba';
