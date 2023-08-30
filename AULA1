@@ -367,4 +367,9 @@ from tb_pedido;
 
 select id_cliente
 from tb_cliente
-where nome = 'Anna' and sobrenome = 'Kelly'; //recuperar os pedidos feito pelo cliente
+where nome = 'Anna' and sobrenome = 'Kelly'; //recuperar o id do cliente
+
+
+select*
+from tb_pedido
+where id_cliente = 8; //recuperar pedidos do cliente com determinado id
