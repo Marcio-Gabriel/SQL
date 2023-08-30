@@ -373,3 +373,9 @@ where nome = 'Anna' and sobrenome = 'Kelly'; //recuperar o id do cliente
 select*
 from tb_pedido
 where id_cliente = 8; //recuperar pedidos do cliente com determinado id
+
+
+select tb_cliente.nome, tb_pedido.dt_compra 
+from tb_cliente, tb_pedido
+where tb_cliente.id_cliente  = tb_pedido.id_cliente //where e a condição para que funcione 
+and tb_cliente.id_cliente = 8; //selecionar com apenas um comando
