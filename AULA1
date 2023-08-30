@@ -360,3 +360,11 @@ from tb_pedido
 where dt_compra >= cast ('2013 07 21' as date); //data compra menor ou igual a aquela
 
 select now(), current_timestamp; //selecionar a data de agr
+
+select dt_entrega - dt_compra as intervalo //mostra os dias entre a compra e a data de entrega 
+from tb_pedido; 
+
+
+select id_cliente
+from tb_cliente
+where nome = 'Anna' and sobrenome = 'Kelly'; //recuperar os pedidos feito pelo cliente
