@@ -300,3 +300,63 @@ SELECT sobrenome AS "Sobrenome do Cliente",
 FROM tb_cliente
 WHERE cidade = 'São Paulo'
 OR cidade = 'Sorocaba';
+
+
+
+select id_cliente, nome
+from tb_cliente
+where nome between 'A' and 'D';
+
+
+select id_cliente, nome
+from tb_cliente
+where nome like '%e';
+
+
+select id_cliente, nome
+from tb_cliente
+where nome like '____';
+
+
+select id_cliente, nome
+from tb_cliente
+where nome like '_a%';
+
+select id_cliente, nome
+from tb_cliente
+where nome ilike '_A%'; //ilike n faz diferença de letra maiuscula ou minuscula
+
+
+select id_cliente, nome
+from tb_cliente
+limit 5;
+
+select id_cliente, nome
+from tb_cliente
+limit 8 offset 2; //offset serve para pular tuplas na tabela
+
+
+select*
+from tb_teste
+where coluna_a is null; //colocar "is" no lugar de "="
+
+select*
+from tb_teste
+where coluna_a is not null;//achar os valores na tabela q n são nulos
+
+
+select cast('2023/08/30' as date); //converter a string para data
+
+select cast ('2023/08/30' as timestamp); // mostrar o horario 
+
+
+select*
+from tb_pedido
+where date_part('month', dt_compra) = 0; //mostrar apenas tuplas de uma determinada data
+
+
+select*
+from tb_pedido
+where dt_compra >= cast ('2013 07 21' as date); //data compra menor ou igual a aquela
+
+select now(), current_timestamp; //selecionar a data de agr
