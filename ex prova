@@ -1,0 +1,51 @@
+----gerar um relatorio que apresente o nome do empregado, juntamente com o nome do seu respectivo gerente---
+-----Exemplo de saida:
+-----Andre Leonardo trabalha para Gabriel Zacarias
+----- (1) Criação do objeto tb_empregado
+----- essa tabela tera im auto-relacionamento
+
+create table tb_empregado(
+id_empregado      INTEGER,
+nm_empregado	  VARCHAR(60),
+salario			  NUMERIC(7,2),
+id_gerente        INTEGER,
+constraint pk_tb_empregado_id_empregado
+	primary KEY(id_empregado),
+constraint fk_tb_empregado_id_gerente
+	foreign key(id_gerente) references
+		tb_empregado(id_empregado)
+);
+
+------(2) realizando uma carga de dados na tb_empregado
+
+select *
+from tb_empregado;
+
+insert into tb_empregado(id_empregado,
+						 id_gerente,
+						 nm_empregado,
+						 salario)
+values
+(100, null, 'Kaua henrique', 24000.00),
+(110, 100, 'Geraldo Henrique Neto', 7500.00),
+(120, 100, 'Andre Leonardo', 8200.00),
+(130, 120, 'Igor Davi', 5100.00),
+(140, 110, 'Julia Prado', 3200.00);
+
+------Relatorio (1)
+-------Quem é gerente de quem?
+
+select e.nm_empregado || ' trabalha para '
+				|| g.nm_empregado "Quem é gerente de quem?"
+from tb_empregado e
+inner join tb_empregado g
+			on(e.id_gerente = g.id_empregado);
+			
+-------Relatorio(2)
+------- Incluindo o CEO (Kaua Henrique) no relatorio
+------- Atraves de uma junção externa que preserva as tuplas de uma determinada tabela (esquerda/direita)
+		
+Select e.nm_empregado || ' trabalha para '
+			||coalesce (g.nm_empregado, ' os acionistas ') "Quem trabalha para quem?"
+from tb_empregado e left outer join tb_empregado g
+		on(e.id_gerente = g.id_empregado);
