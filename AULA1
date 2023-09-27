@@ -450,3 +450,12 @@ inner join tb_item i on (ip.id_item = i.id_item)
 where c.nome = 'Anna'and
 	c.sobrenome = 'Kelly';
 
+
+select preco_custo , ds_item
+from tb_item
+where preco_custo = (select max(preco_custo ) from tb_item); // pega o item com o maior valor e a descrição dele
+
+
+
+select cast(avg(preco_venda) as numeric(7,2)) as "Média"
+from tb_item; //media com duas casasdecimais
