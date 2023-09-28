@@ -504,3 +504,23 @@ where sobrenome similar to '%(Matheus|Mendes)%';
 select nome, sobrenome
 from tb_cliente
 where nome similar to '(S|A)%';
+
+
+select
+(select min(preco_venda)from tb_item) as Menor,
+(select max(preco_venda)from tb_item) as maior,
+(select avg(preco_venda)from tb_item) as Média;
+
+create tablespace tablespace_01
+location 'C://tablespace_postgresql';
+
+create table tb_test_tablespace(
+col_2		INTEGER)
+tablespace tablespace_01;
+
+insert into tb_test_tablespace
+values
+(generate_series(1, 1000));
+
+select*
+from tb_test_tablespace;
