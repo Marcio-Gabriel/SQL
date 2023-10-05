@@ -542,6 +542,18 @@ where i.id_item = e.id_item;
 select i.id_item, i.ds_item
 from tb_item i
 where i.id_item not in (select i.id_item
-						from tb_item  i, tb_estoque e
-						where i.id_item = e.id_item)
+				from tb_item  i, tb_estoque e
+				where i.id_item = e.id_item)
+
+select i.id_item, i.ds_item, e.quantidade 
+from tb_item i
+left outer join tb_estoque  e on(i.id_item = e.id_item);
+
+
+select i.id_item, i.ds_item, e.quantidade
+from tb_item i
+left outer join tb_estoque e
+ on(i.id_item = e.id_item and e.quantidade > 2);
+
+
 
