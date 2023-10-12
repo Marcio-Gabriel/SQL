@@ -728,3 +728,175 @@ select oid, col_a, col_b
 from tb_teste_oid;
 
 show all;
+
+
+create table tb_teste_restricoes(
+col_notnull		int not null,
+col_unique		int unique,
+col_pk			int primary key,
+col_default		int default 42,
+col_check		int check(col_check < 42)
+);
+
+
+insert into tb_teste_restricoes(col_notnull,
+								col_unique,
+								col_pk,
+								col_default,
+								col_check)
+values
+(1,1,1,1,1),
+(2,2,2,2,2);
+
+
+
+insert into tb_teste_restricoes(col_notnull, -- Ira ocorrer um erro
+								col_unique,
+								col_pk,
+								col_default,
+								col_check)
+values
+(2,2,2,2,2); -- Erro SQL [23505]: ERROR: duplicate key value violates unique constraint "tb_teste_restricoes_pkey" Detalhe: Key (col_pk)=(2) already exists.
+
+
+
+
+insert into tb_teste_restricoes(col_notnull,
+								col_unique,
+								col_pk,
+								col_default,
+								col_check)
+values
+(1,null,98,1,1),
+(1,null,99,1,1);
+
+
+
+insert into tb_teste_restricoes(col_notnull, --Erro SQL [23505]: ERROR: duplicate key value violates unique constraint "tb_teste_restricoes_col_unique_key"Detalhe: Key (col_unique)=(2) already exists.
+								col_unique,
+								col_pk,
+								col_default,
+								col_check)
+values
+(2,2,9,2,2);
+
+
+
+insert into tb_teste_restricoes(col_notnull,--Erro SQL [23514]: ERROR: new row for relation "tb_teste_restricoes" violates check constraint "tb_teste_restricoes_col_check_check"Detalhe: Failing row contains (3, 3, 3, 3, 100).
+								col_unique,
+								col_pk,
+								col_default,
+								col_check)
+values
+(3,3,3,3,100);
+
+
+
+
+insert into tb_teste_restricoes(col_notnull, --Erro SQL [42601]: ERROR: INSERT has more target columns than expressionsPosição: 115
+								col_unique,
+								col_pk,
+								col_default,
+								col_check)
+values
+(3,3,3,41);
+
+
+
+drop table tb_teste_restricoes;
+
+create table tb_teste_restricoes(
+chave1					int,
+chave2					int,
+mystring				VARCHAR(15),
+constraint cs1 check(mystring<>''),
+constraint cs2 primary key(chave1, chave2)
+);
+
+
+insert into tb_teste_restricoes
+values 
+(1,1,'Olá'),
+(1,2,'Tchau');
+
+insert into tb_teste_restricoes --Erro SQL [23514]: ERROR: new row for relation "tb_teste_restricoes" violates check constraint "cs1"Detalhe: Failing row contains (1, 2, ).
+values
+(1,2,'');
+
+
+alter table tb_teste_restricoes
+add column mydate date;
+
+
+alter table tb_teste_restricoes 
+rename column mydate to dt_nascimento;
+
+
+select*
+from tb_teste_restricoes;
+	
+
+alter table tb_teste_restricoes
+drop constraint cs1;
+
+
+alter table tb_teste_restricoes
+add constraint cs3 unique(dt_nascimento);
+
+
+alter table tb_teste_restricoes
+alter column mystring set default 'ok';
+
+
+alter table tb_teste_restricoes
+alter dt_nascimento type varchar(32);
+
+
+alter table tb_teste_restricoes
+rename to tb_teste_restricoes_2;
+
+
+drop table tb_teste_restricoes_2;
+
+
+create temporary table tb_teste_restricoes(
+chave1			int,
+chave2			int,
+mystring		Varchar(15),
+constraint cs1 check(mystring <>''),
+constraint cs2 primary key(chave1, chave2)
+);
+
+
+create table tb_cidades(
+nome			text,
+populacao		float,
+altitude		int);
+
+create table tb_capitais(
+uf				char(2)
+)inherits(tb_cidades);
+
+
+select*
+from tb_capitais;
+
+alter table tb_cidades drop column nome;
+
+drop table tb_cidades, tb_capitais;
+
+
+create table tb_cidades(
+nome			text,
+populacao		float,
+altitude		int);
+
+create table tb_capitais(
+uf				char(2),
+like tb_cidades
+);
+
+
+select i.ds_item, e.quantidade
+from tb_item i
+join tb_estoque e on(i.id_item = e.id_item);
