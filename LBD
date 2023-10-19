@@ -900,3 +900,212 @@ like tb_cidades
 select i.ds_item, e.quantidade
 from tb_item i
 join tb_estoque e on(i.id_item = e.id_item);
+
+
+
+create view vs_status_estoque as
+select i.ds_item, e.quantidade
+from tb_item i
+join tb_estoque e on(i.id_item = e.id_item);
+
+
+select*
+from vs_status_estoque;
+
+
+create table tb_teste_view(
+col_a    serial,
+col_b    	varchar(10),
+col_c    	varchar(10),
+fg_ativo	boolean,
+primary key(col_a)
+);
+
+
+insert into tb_teste_view(col_b,
+							col_c,
+							fg_ativo)
+values
+('Desc 1', 'Desc 1', TRUE),
+('Desc 2', 'Desc 2', TRUE),
+('Desc 3', 'Desc 3', TRUE);
+
+
+create view vw_teste as
+select*
+from tb_teste_view;
+
+
+select*
+from vw_teste;
+
+alter table tb_teste_view
+add column col_d VARCHAR(10);
+
+
+create or replace view vw_teste as
+select*
+from tb_teste_view;
+
+create table "Tb_Cliente_Teste"
+as
+select*
+from tb_cliente;
+
+
+select count(*)
+from "Tb_Cliente_Teste";
+
+
+select quote_ident('Tb_Cliente_Teste'); 
+
+create table tb_dados_duplicados(
+id_cliente			INTEGER,
+nm_cliente			VARCHAR,
+sobrenome			VARCHAR,
+idade				INTEGER
+);
+
+
+insert into tb_dados_duplicados
+values
+(1, 'Philip', 'Marlowe', 38),
+(2, 'Richard', 'Hannay', 42),
+(3, 'Holly', 'Martins', 25),
+(4, 'Harry', 'Palmer', 36),
+(4, 'Mark', 'Hall', 47);
+
+select*
+from tb_dados_duplicados 
+where id_cliente in(select id_cliente
+					from tb_dados_duplicados 
+					group by id_cliente
+					having count(*) > 1);
+
+				
+delete 
+from tb_dados_duplicados 
+where id_cliente = 4
+and sobrenome = 'Hall';
+
+
+create table tb_novo_cliente
+as
+select id_cliente
+from tb_dados_duplicados;
+
+insert into tb_novo_cliente 
+values(4);
+
+select*
+from tb_novo_cliente;
+
+lock table tb_novo_cliente in row exclusive mode;
+
+	delete from tb_novo_cliente
+	where ctid not in (select min(ctid)
+						from tb_novo_cliente
+						where id_cliente in(1, 2, 3, 4)
+						group by id_cliente);
+						
+					
+alter table  tb_novo_cliente 
+add constraint pk_tb_novo_cliente_id_cliente
+primary key(id_cliente);
+
+alter table tb_novo_cliente 
+add unique(id_cliente);
+
+create unique index on tb_novo_cliente(id_cliente);
+
+
+select*
+from generate_series(1,5);
+
+
+select date(generate_series(now(),
+			now() + '1 week',
+			'1 day'));
+			
+select (random()* (2*10^9))::INTEGER;
+
+select(random()*(9*10^18))::BIGINT;
+
+select(random()*100.)::numeric(4,2);
+
+select repeat('1',(random()*40)::INTEGER);
+
+select substr('ajsdhaisdashdkah',1,
+				(random()*26)::INTEGER);
+			
+			
+select generate_series(1,10)as chave,
+	(random()*100.)::numeric(4,2),
+	repeat('1',(random()*25)::integer)
+order by random() * 3;
+
+
+create table tb_exemplos
+as
+select*
+from tb_cliente
+where id_cliente is null;
+
+
+select*
+from tb_cliente;
+
+copy tb_exemplos
+from 'C:/temp/tb_cliente_202310182125.csv'
+	using delimiters','
+	csv header;
+
+
+create table tb_xml(
+id				serial,
+documento_xml	xml,
+constraint pk_xml_id primary key(id));
+
+
+insert into tb_xml(documento_xml)
+select xmlforest(nome, endereco, cidade)
+from tb_cliente
+)
+
+select*
+from tb_xml;
+
+copy(select documento_xml
+	from tb_xml)
+	to'c:/temp/xml_teste.xml';
+
+create table tb_produtos(
+id_produto			Int not null primary key,
+produto_codigo		VARCHAR(20),
+produto_nome		VARCHAR(60),
+produto_valor		real,
+produto_situacao	VARCHAR(1)DEFAULT'A',
+data_criacao		timestamp,
+data_atualizacao		timestamp
+);
+
+
+
+alter table tb_produtos
+add column	produtos_categorias text[];
+
+
+alter table tb_produtos
+add column produto_estoque json;
+
+
+insert into tb_produtos
+values
+(99, '6234', 'coca-cola', 6, 'A', '01/01/2023', '01/01/2023',
+	'{"REFRIGERANTE", "LATA", "BEDIDA","COLA"}',
+	'{"info_estoque":
+	{"tem_estoque":"SIM",
+	"quantidade":17,
+	"ultima_compra":"01/01/2023"})
+	}'
+	);
