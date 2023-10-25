@@ -1101,7 +1101,7 @@ add column produto_estoque json;
 
 insert into tb_produtos
 values
-(99, '6234', 'coca-cola', 6, 'A', '01/01/2023', '01/01/2023',
+(99, '6234', 'COCA-COLA', 6, 'A', '01/01/2023', '01/01/2023',
 	'{"REFRIGERANTE", "LATA", "BEDIDA","COLA"}',
 	'{"info_estoque":
 	{"tem_estoque":"SIM",
