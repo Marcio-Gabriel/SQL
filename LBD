@@ -1106,6 +1106,6 @@ values
 	'{"info_estoque":
 	{"tem_estoque":"SIM",
 	"quantidade":17,
-	"ultima_compra":"01/01/2023"})
+	"ultima_compra":"01/01/2023"}
 	}'
 	);
