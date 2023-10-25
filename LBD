@@ -1109,3 +1109,30 @@ values
 	"ultima_compra":"01/01/2023"}
 	}'
 	);
+
+select produto_estoque -> 'info_estoque'->>'quantidade'
+		as quantidade
+from tb_produtos
+where produto_nome like 'COCA-COLA';
+
+
+select produto_estoque -> 'info_estoque'
+		as "Retornando um JSON"
+from tb_produtos
+where produto_nome like 'COCA-COLA';
+
+
+copy(select*
+		from tb_cliente)
+to 'c:/temp/cliente_18_10_23.csv'
+with
+delimiter as ';';
+
+
+copy(select*
+		from tb_cliente)
+to 'c:/temp/cliente_18_10_23.txt'
+with
+delimiter as ';';
+
+
