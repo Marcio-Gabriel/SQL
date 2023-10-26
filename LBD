@@ -1221,3 +1221,148 @@ language plpgsql;
 
 select fn_tipo_tupla(10);
 
+
+create or replace function fn_cliente(tb_cliente.id_cliente%type)
+returns text as 
+$$
+declare 
+v_linha record;
+begin
+	select * into v_linha
+	from tb_cliente 
+	where id_cliente = $1;
+if not found then
+ raise exception 'Cliente % não encontrado',$1;
+else
+return 'Cliente encontrado';
+end if;
+end
+$$
+language plpgsql;
+
+select fn_cliente(10);
+
+
+select fn_cliente(99);
+
+
+
+create table tb_log(
+nome			varchar(30),
+data_hora		timestamp
+);
+
+
+create or replace function fn_log(p_nome varchar)
+returns timestamp as
+$$
+begin 
+	insert into tb_log
+	values(p_nome, now());
+return now();
+end
+$$
+language plpgsql;
+
+
+select fn_log('Geraldo');
+
+
+
+select*
+from tb_log;
+
+
+
+create or replace function fn_loop_basico()
+returns void as 
+$$
+declare 
+v_contador integer;
+begin 
+	v_contador := 0;
+loop
+	v_contador := v_contador + 1;
+	raise notice 'contador eh: %', v_contador;
+	exit when v_contador >= 1000;
+end loop;
+return;
+end;
+$$
+language plpgsql;
+
+
+select fn_loop_basico();
+
+
+
+
+create sequence sq_categorias;
+
+create table tb_categoria(
+id_categoria			integer,
+ds_categoria			varchar(40) not null,
+fg_ativo				integer not null,
+primary key(id_categoria)
+);
+
+
+
+
+
+
+
+create or replace function fn_categoria(p_id_categoria integer,
+                                        p_descricao varchar,
+                                        p_flag integer,
+                                        p_opcao char)
+returns integer as 
+$$
+declare 
+   v_id_categoria tb_categoria.id_categoria%type;
+begin
+	if p_opcao = 'I' then
+	  	select nextval('sq_categoria') into v_id_categoria;
+	 
+	 	insert into tb_categoria(id_categoria,
+	                         	 ds_categoria,
+	                         	 fg_ativo)
+     	values(v_id_categoria, p_descricao, p_flag);
+    
+    return v_id_categoria;
+   
+   elsif p_opcao = 'U' then
+	    update tb_categoria
+	    set ds_categoria = p_descricao
+	    where id_categoria = p_id_categoria;
+	   
+   return p_id_categoria;
+  
+  elsif p_opcao = 'D' then
+	  delete 
+	  from tb_categoria 
+	  where id_categoria = p_id_categoria;
+	 
+ 	return 0;
+ else
+ 	return -1;
+ end if;
+	 exception 
+	   when others then
+	   return -1;
+	
+end;
+$$
+language plpgsql;
+
+
+
+select fn_categoria(null, 'CATEGORIA 1',1,'I');
+select fn_categoria(null, 'CATEGORIA 2',1,'I');
+select fn_categoria(null, 'CATEGORIA 3',1,'I');
+
+select fn_categoria(1, 'CATEGORIA 1 - ALTERADA', 1,'U');
+
+
+
+select fn_categoria(3, null, null, 'D');
