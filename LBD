@@ -1512,3 +1512,44 @@ language plpgsql;
 create trigger tg_empregados_auditoria
 after insert or update or delete on tb_empregados
 for each row execute procedure fn_empregado_auditoria();
+
+
+
+
+
+-- criar uma função para exibir o nome , salario e cargo
+-- de um determinado funcionario.
+-- o ID do funcionario devera ser passado como parametro 
+-- de entrada (modo IN) da função
+
+
+create or replace 
+	function fn_get_funcionario(p_id INTEGER)
+	returns varchar
+as 
+$$
+declare 
+	v_nome		tb_funcionario.nm_funcionario%type;
+	v_salario	tb_funcionario.salario%type;
+	v_cargo		tb_funcionario.cargo%type;
+begin
+	select nm_funcionario, salario, cargo
+	into v_nome, v_salario, v_cargo
+	from tb_funcionario
+	where id_funcionario = p_id;
+	if(v_nome is not null) then
+		return 'Nome: ' || v_nome ||
+				'Salario: ' || v_salario ||
+				'Cargo: ' || v_cargo;
+			
+	else 
+		return 'o ID: ' || p_id || 'não existe'
+	end if;
+end;
+$$
+language plpgsql;
+
+
+
+select fn_get_funcionario(7839);
+select fn_get_funcionario(9999);
